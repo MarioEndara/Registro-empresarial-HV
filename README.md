@@ -1,65 +1,25 @@
-# Registro de estudiantes — Ionic + Angular Standalone + Firebase
+# TalentFlow SA - Registro de Hojas de Vida
 
-Ejemplo didáctico: formulario con nombre, correo y edad; guarda documentos y lista registros de **Cloud Firestore**, sin login.
+Este es el proyecto que hicimos para el taller de Desarrollo de Aplicaciones Móviles. La idea era armar un prototipo (MVP) para que la empresa TalentFlow SA pueda registrar los datos de los postulantes en un formulario y guardarlos en la nube, en lugar de andar recibiendo hojas de vida por correo.
 
-## Requisitos
+Lo hicimos usando Ionic con Angular (en modo Standalone) y Firebase Cloud Firestore para la base de datos.
 
-- Node.js compatible con Angular 20 (por ejemplo Node.js 22 LTS)
-- npm
-- Cuenta y proyecto en Firebase
+## ¿Qué hace la app?
 
-## 1. Instalar
+La aplicación tiene dos partes principales:
 
-```bash
-npm install
-```
+1. **Registrar Candidato:** Es un formulario bien completo, dividido por secciones (datos personales, perfil profesional, disponibilidad, presentación y un consentimiento). Tiene validaciones para que no se guarden datos incompletos, el típico mensaje de "éxito" abajo cuando guardas, y un spinner que da vueltas mientras se sube la info a Firebase. Cuando terminas, el formulario se limpia solo.
+2. **Consultar Candidatos:** Es la otra pantalla. Aquí se carga la lista de todas las personas que hemos registrado, trayendo los datos directo de Firestore. Se muestran en tarjetas con un resumen rápido, y si haces clic en "Ver detalle completo", se abre un acordeón con toda la información (teléfono, habilidades, resumen, etc.). También le pusimos un botón de recargar arriba por si acaso.
 
-## 2. Configurar Firebase
+## Componentes de Ionic que usamos
 
-1. Abre Firebase Console y crea un proyecto.
-2. Registra una **aplicación Web** y copia los valores `firebaseConfig`.
-3. Sustituye los marcadores de `src/environments/environment.ts`.
-4. En **Firestore Database**, crea la base de datos.
-5. Para una práctica temporal con **datos ficticios**, copia el contenido de `firestore.rules` a la pestaña **Reglas** de Firestore y publícalo.
+Para cumplir con lo que pedía la rúbrica, usamos un montón de componentes. Los principales son:
+`ion-input`, `ion-datetime`, `ion-radio-group` con `ion-radio`, `ion-select`, `ion-checkbox`, `ion-textarea`, `ion-button`, `ion-list`, `ion-item`, `ion-card`, `ion-spinner`, `ion-accordion` y los `ion-toast` para las notificaciones.
 
-**Seguridad:** las reglas de demostración permiten lecturas y escrituras anónimas (creación) desde cualquier cliente. No usar datos personales reales, no publicar esta configuración en producción y restringir o eliminar las reglas al terminar la clase. Para una aplicación real, usar Firebase Authentication y reglas restrictivas.
+## ¿Cómo correrlo en local?
 
-Reglas de firestore:
-rules_version = '2';
+Si quieres probarlo en tu compu, solo tienes que hacer lo siguiente:
 
-service cloud.firestore {
-  match /databases/{database}/documents {
-
-    match /estudiantes/{documento} {
-
-      // Permitir consultar estudiantes
-      allow read: if true;
-
-      // Permitir registrar estudiantes
-      allow create: if true;
-
-      // No permitir modificar ni eliminar
-      allow update, delete: if false;
-    }
-  }
-}
-
-## 3. Ejecutar
-
-```bash
-ionic serve
-```
-
-
-También puedes instalar Ionic CLI (`npm install -g @ionic/cli`) y ejecutar `ionic serve`.
-
-## Archivos principales
-
-- `src/app/home/home.page.ts`: lógica del formulario.
-- `src/app/home/home.page.html`: interfaz Ionic.
-- `src/app/services/firebase.service.ts`: operaciones `addDoc` y `getDocs`.
-- `src/environments/environment.ts`: configuración Firebase.
-
-## Actividad de ampliación
-
-Agregar los campos `carrera` y `semestre`, guardarlos en Firestore y mostrarlos en la lista.
+1. Clonar el repo:
+   ```bash
+   git clone https://github.com/MarioEndara/Registro-empresarial-HV.git

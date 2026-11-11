@@ -115,8 +115,9 @@
     </ion-list>
 
     <!-- Botón de envío -->
-    <ion-button expand="block" type="submit" class="ion-margin-top" [disabled]="!formCandidato.valid">
-      Registrar Candidato
+    <ion-button expand="block" type="submit" class="ion-margin-top" [disabled]="!formCandidato.valid || guardando">
+      <ion-spinner *ngIf="guardando" name="crescent"></ion-spinner>
+      <span *ngIf="!guardando">Registrar Candidato</span>
     </ion-button>
 
     <!-- Mensaje de error si intenta enviar sin cumplir -->
@@ -125,4 +126,8 @@
     </p>
 
   </form>
+  <!-- Botón para ir a la vista de consultar -->
+<ion-button expand="block" color="secondary" routerLink="/consultar" class="ion-margin-top">
+  Ver Candidatos Registrados
+</ion-button>
 </ion-content>

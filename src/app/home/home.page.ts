@@ -1,14 +1,15 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router'; // Para el botón de ir a consultar
 import { 
   IonHeader, IonToolbar, IonTitle, IonContent, IonList, 
   IonItem, IonLabel, IonInput, IonDatetime, IonSelect, 
   IonSelectOption, IonRadioGroup, IonRadio, IonSegment, 
   IonSegmentButton, IonCheckbox, IonTextarea, IonButton, 
-  IonItemDivider, ToastController // <-- Importamos Toast
+  IonItemDivider, IonSpinner, ToastController 
 } from '@ionic/angular/standalone';
-import { Firestore, collection, addDoc } from '@angular/fire/firestore'; // <-- Importamos Firestore
+import { Firestore, collection, addDoc, serverTimestamp } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-home',
@@ -16,16 +17,19 @@ import { Firestore, collection, addDoc } from '@angular/fire/firestore'; // <-- 
   styleUrls: ['home.page.scss'],
   standalone: true,
   imports: [
-    CommonModule, FormsModule,
+    CommonModule, 
+    FormsModule,
+    RouterLink, // Importado para que funcione el botón de consultar
     IonHeader, IonToolbar, IonTitle, IonContent, IonList, 
     IonItem, IonLabel, IonInput, IonDatetime, IonSelect, 
     IonSelectOption, IonRadioGroup, IonRadio, IonSegment, 
     IonSegmentButton, IonCheckbox, IonTextarea, IonButton, 
-    IonItemDivider
+    IonItemDivider, IonSpinner
   ]
 })
 export class HomePage {
   fechaHoy = new Date().toISOString();
+  guardando = false; 
 
   candidato = {
     nombresApellidos: '',
@@ -53,36 +57,59 @@ export class HomePage {
     private toastCtrl: ToastController
   ) {}
 
+  // --- AQUÍ ESTÁ LA FUNCIÓN ACTUALIZADA CON VALIDACIONES ---
   async guardarCandidato() {
-    // 1. Creamos la referencia a la colección 'candidatos'
-    const candidatosRef = collection(this.firestore, 'candidatos');
-    
-    // 2. Guardamos los datos en Firestore (addDoc genera el ID automático)
-    try {
-      await addDoc(candidatosRef, this.candidato);
-      
-      // 3. Mostramos un mensaje de éxito
-      const toast = await this.toastCtrl.create({
-        message: '¡Candidato registrado exitosamente!',
-        duration: 2000,
-        color: 'success',
-        position: 'bottom'
-      });
-      await toast.present();
+    // 1. VALIDACIONES REALES ANTES DE ENVIAR A FIREBASE
+    if (!this.candidato.nombresApellidos || this.candidato.nombresApellidos.length < 3) {
+      return this.mostrarToast('El nombre debe tener al menos 3 caracteres', 'danger');
+    }
+    if (!this.candidato.correo || !this.candidato.correo.includes('@')) {
+      return this.mostrarToast('El correo electrónico no es válido', 'danger');
+    }
+    if (!this.candidato.telefono || this.candidato.telefono.length < 7) {
+      return this.mostrarToast('El teléfono debe tener al menos 7 dígitos', 'danger');
+    }
+    if (!this.candidato.habilidadesTecnicas || this.candidato.habilidadesTecnicas.length === 0) {
+      return this.mostrarToast('Selecciona al menos una habilidad técnica', 'danger');
+    }
+    if (!this.candidato.resumenProfesional || this.candidato.resumenProfesional.length < 30) {
+      return this.mostrarToast('El resumen profesional debe tener al menos 30 caracteres', 'danger');
+    }
+    if (!this.candidato.aceptaTratamientoDatos) {
+      return this.mostrarToast('Debes aceptar el tratamiento de datos', 'danger');
+    }
 
-      // 4. Limpiamos el formulario
+    // 2. SI PASA TODAS LAS VALIDACIONES, GUARDAMOS EN FIREBASE
+    this.guardando = true; 
+    
+    try {
+      const candidatosRef = collection(this.firestore, 'candidatos');
+      
+      await addDoc(candidatosRef, {
+        ...this.candidato,
+        fechaCreacion: serverTimestamp() 
+      });
+      
+      this.mostrarToast('¡Candidato registrado exitosamente!', 'success');
       this.limpiarFormulario();
 
     } catch (error) {
       console.error('Error al guardar:', error);
-      const toast = await this.toastCtrl.create({
-        message: 'Error al guardar. Revisa la consola.',
-        duration: 2000,
-        color: 'danger',
-        position: 'bottom'
-      });
-      await toast.present();
+      this.mostrarToast('Error al guardar. Revisa la consola.', 'danger');
+    } finally {
+      this.guardando = false; 
     }
+  }
+
+  // Función auxiliar para mostrar los mensajes de éxito o error
+  async mostrarToast(mensaje: string, color: string) {
+    const toast = await this.toastCtrl.create({
+      message: mensaje,
+      duration: 2500,
+      color: color,
+      position: 'bottom'
+    });
+    await toast.present();
   }
 
   toggleHabilidad(habilidad: string, event: any) {
@@ -95,19 +122,10 @@ export class HomePage {
 
   limpiarFormulario() {
     this.candidato = {
-      nombresApellidos: '',
-      correo: '',
-      telefono: '',
-      fechaNacimiento: '',
-      cargoPostula: '',
-      nivelAcademico: '',
-      aniosExperiencia: null,
-      modalidadTrabajo: '',
-      habilidadesTecnicas: [],
-      fechaDisponibleInicio: '',
-      aspiracionSalarial: null,
-      resumenProfesional: '',
-      aceptaTratamientoDatos: false
+      nombresApellidos: '', correo: '', telefono: '', fechaNacimiento: '',
+      cargoPostula: '', nivelAcademico: '', aniosExperiencia: null,
+      modalidadTrabajo: '', habilidadesTecnicas: [], fechaDisponibleInicio: '',
+      aspiracionSalarial: null, resumenProfesional: '', aceptaTratamientoDatos: false
     };
   }
 }

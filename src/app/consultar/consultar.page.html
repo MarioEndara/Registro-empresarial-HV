@@ -1,0 +1,65 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>TalentFlow - Candidatos</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cargarCandidatos()">
+        <ion-icon name="refresh-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  
+  <!-- Título de bienvenida -->
+  <h2 class="ion-text-center" style="color: #3880ff; margin-bottom: 5px;">Perfiles Registrados</h2>
+  <p class="ion-text-center" style="font-size: 0.9em; color: gray; margin-top: 0;">Total: {{ candidatos.length }} candidato(s)</p>
+
+  <!-- Spinner -->
+  <div *ngIf="cargando" class="ion-text-center ion-margin-top">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Cargando candidatos...</p>
+  </div>
+
+  <!-- Listado de Candidatos -->
+  <div *ngIf="!cargando">
+    <div *ngFor="let candidato of candidatos">
+      
+      <ion-card style="border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+        <ion-card-header>
+          <ion-card-title style="font-weight: bold;">{{ candidato.nombresApellidos }}</ion-card-title>
+          <ion-card-subtitle style="color: #3880ff;">{{ candidato.cargoPostula }}</ion-card-subtitle>
+        </ion-card-header>
+        
+        <ion-card-content>
+          <p><strong>📧 Correo:</strong> {{ candidato.correo }}</p>
+          <p><strong>💼 Años de Exp:</strong> {{ candidato.aniosExperiencia }}</p>
+          
+          <ion-accordion-group>
+            <ion-accordion value="detalle">
+              <ion-item slot="header" color="light">
+                <ion-label style="font-size: 0.9em;">Ver Detalle Completo</ion-label>
+              </ion-item>
+              <div slot="content" class="ion-padding" style="font-size: 0.9em;">
+                <p><strong>📞 Teléfono:</strong> {{ candidato.telefono }}</p>
+                <p><strong>🎂 Fecha Nacimiento:</strong> {{ candidato.fechaNacimiento }}</p>
+                <p><strong>🎓 Nivel Académico:</strong> {{ candidato.nivelAcademico }}</p>
+                <p><strong>🏠 Modalidad:</strong> {{ candidato.modalidadTrabajo }}</p>
+                <p><strong>🛠️ Habilidades:</strong> {{ candidato.habilidadesTecnicas?.join(', ') }}</p>
+                <p><strong>💰 Aspiración Salarial:</strong> ${{ candidato.aspiracionSalarial }}</p>
+                <p><strong>📝 Resumen:</strong> {{ candidato.resumenProfesional }}</p>
+              </div>
+            </ion-accordion>
+          </ion-accordion-group>
+        </ion-card-content>
+      </ion-card>
+
+    </div>
+
+    <!-- Mensaje si no hay registros -->
+    <div *ngIf="candidatos.length === 0" class="ion-text-center ion-margin-top">
+      <ion-label>No hay candidatos registrados aún.</ion-label>
+    </div>
+  </div>
+
+</ion-content>
