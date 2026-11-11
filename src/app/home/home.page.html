@@ -1,15 +1,128 @@
-<ion-header><ion-toolbar color="primary"><ion-title>Registro de estudiantes</ion-title></ion-toolbar></ion-header>
+<ion-header>
+  <ion-toolbar>
+    <ion-title>TalentFlow - Nuevo Candidato</ion-title>
+  </ion-toolbar>
+</ion-header>
+
 <ion-content class="ion-padding">
-  <ion-card>
-    <ion-card-header><ion-card-title>Nuevo estudiante</ion-card-title></ion-card-header>
-    <ion-card-content>
-      <ion-item><ion-input label="Nombre" labelPlacement="stacked" placeholder="Ingrese su nombre" [(ngModel)]="nombre"></ion-input></ion-item>
-      <ion-item><ion-input label="Correo electrónico" labelPlacement="stacked" type="email" placeholder="correo@ejemplo.com" [(ngModel)]="correo"></ion-input></ion-item>
-      <ion-item><ion-input label="Edad" labelPlacement="stacked" type="number" placeholder="Ingrese su edad" [(ngModel)]="edad"></ion-input></ion-item>
-      <ion-button expand="block" class="ion-margin-top" [disabled]="guardando" (click)="guardar()">{{ guardando ? 'Guardando...' : 'Guardar estudiante' }}</ion-button>
-      <p *ngIf="mensaje" role="status">{{ mensaje }}</p>
-    </ion-card-content>
-  </ion-card>
-  <h2>Estudiantes registrados</h2>
-  <ion-list><ion-item *ngFor="let estudiante of estudiantes"><ion-label><h2>{{ estudiante.nombre }}</h2><p>{{ estudiante.correo }}</p><p>Edad: {{ estudiante.edad }}</p></ion-label></ion-item></ion-list>
+  <form (ngSubmit)="guardarCandidato()" #formCandidato="ngForm">
+    
+    <!-- SECCIÓN 1: Datos Personales -->
+    <ion-list>
+      <ion-item-divider><ion-label>1. Datos Personales</ion-label></ion-item-divider>
+
+      <ion-item>
+        <ion-input label="Nombres y Apellidos" label-placement="floating" [(ngModel)]="candidato.nombresApellidos" name="nombresApellidos" required minlength="3"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-input label="Correo Electrónico" label-placement="floating" type="email" [(ngModel)]="candidato.correo" name="correo" required></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-input label="Teléfono" label-placement="floating" type="tel" [(ngModel)]="candidato.telefono" name="telefono" required minlength="7"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Fecha de Nacimiento</ion-label>
+        <ion-datetime presentation="date" [(ngModel)]="candidato.fechaNacimiento" name="fechaNacimiento" required [max]="fechaHoy"></ion-datetime>
+      </ion-item>
+    </ion-list>
+
+    <!-- SECCIÓN 2: Perfil Profesional -->
+    <ion-list>
+      <ion-item-divider><ion-label>2. Perfil Profesional</ion-label></ion-item-divider>
+
+      <!-- Cargo al que postula -->
+      <ion-item>
+        <ion-select label="Cargo al que postula" label-placement="floating" [(ngModel)]="candidato.cargoPostula" name="cargoPostula" required interface="popover">
+          <ion-select-option value="desarrollador">Desarrollador de Software</ion-select-option>
+          <ion-select-option value="analista">Analista de Datos</ion-select-option>
+          <ion-select-option value="disenador">Diseñador UX/UI</ion-select-option>
+          <ion-select-option value="gerente">Gerente de Proyectos</ion-select-option>
+          <ion-select-option value="soporte">Soporte Técnico</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <!-- Nivel académico -->
+      <ion-item>
+        <ion-label>Nivel Académico</ion-label>
+      </ion-item>
+      <ion-radio-group [(ngModel)]="candidato.nivelAcademico" name="nivelAcademico" required>
+        <ion-item><ion-radio value="secundaria">Secundaria</ion-radio></ion-item>
+        <ion-item><ion-radio value="tecnico">Técnico/Tecnólogo</ion-radio></ion-item>
+        <ion-item><ion-radio value="universitario">Universitario</ion-radio></ion-item>
+        <ion-item><ion-radio value="posgrado">Posgrado</ion-radio></ion-item>
+      </ion-radio-group>
+
+      <!-- Años de experiencia -->
+      <ion-item>
+        <ion-input label="Años de Experiencia" label-placement="floating" type="number" [(ngModel)]="candidato.aniosExperiencia" name="aniosExperiencia" min="0" max="50" required></ion-input>
+      </ion-item>
+
+      <!-- Modalidad de trabajo -->
+      <ion-item>
+        <ion-label>Modalidad de Trabajo</ion-label>
+      </ion-item>
+      <ion-segment [(ngModel)]="candidato.modalidadTrabajo" name="modalidadTrabajo" required>
+        <ion-segment-button value="presencial"><ion-label>Presencial</ion-label></ion-segment-button>
+        <ion-segment-button value="hibrido"><ion-label>Híbrido</ion-label></ion-segment-button>
+        <ion-segment-button value="remoto"><ion-label>Remoto</ion-label></ion-segment-button>
+      </ion-segment>
+
+      <!-- Habilidades técnicas -->
+      <ion-item>
+        <ion-label>Habilidades Técnicas (mín. 1)</ion-label>
+      </ion-item>
+      <ion-list>
+        <ion-item *ngFor="let hab of listaHabilidades">
+          <ion-checkbox (ionChange)="toggleHabilidad(hab, $event)">{{ hab }}</ion-checkbox>
+        </ion-item>
+      </ion-list>
+    </ion-list>
+
+    <!-- SECCIÓN 3: Disponibilidad -->
+    <ion-list>
+      <ion-item-divider><ion-label>3. Disponibilidad</ion-label></ion-item-divider>
+
+      <ion-item>
+        <ion-label position="stacked">Fecha disponible para iniciar</ion-label>
+        <ion-datetime presentation="date" [(ngModel)]="candidato.fechaDisponibleInicio" name="fechaDisponibleInicio" required [min]="fechaHoy"></ion-datetime>
+      </ion-item>
+
+      <ion-item>
+        <ion-input label="Aspiración Salarial (USD)" label-placement="floating" type="number" [(ngModel)]="candidato.aspiracionSalarial" name="aspiracionSalarial" min="1" required></ion-input>
+      </ion-item>
+    </ion-list>
+
+    <!-- SECCIÓN 4: Presentación -->
+    <ion-list>
+      <ion-item-divider><ion-label>4. Presentación</ion-label></ion-item-divider>
+
+      <ion-item>
+        <ion-textarea label="Resumen Profesional (mín. 30 caracteres)" label-placement="floating" [(ngModel)]="candidato.resumenProfesional" name="resumenProfesional" rows="4" autoGrow="true" required minlength="30"></ion-textarea>
+      </ion-item>
+    </ion-list>
+
+    <!-- SECCIÓN 5: Consentimiento -->
+    <ion-list>
+      <ion-item-divider><ion-label>5. Consentimiento</ion-label></ion-item-divider>
+      <ion-item>
+        <ion-checkbox [(ngModel)]="candidato.aceptaTratamientoDatos" name="aceptaTratamientoDatos" required>
+          Acepto el tratamiento de mis datos personales para fines de prueba.
+        </ion-checkbox>
+      </ion-item>
+    </ion-list>
+
+    <!-- Botón de envío -->
+    <ion-button expand="block" type="submit" class="ion-margin-top" [disabled]="!formCandidato.valid">
+      Registrar Candidato
+    </ion-button>
+
+    <!-- Mensaje de error si intenta enviar sin cumplir -->
+    <p *ngIf="formCandidato.invalid && formCandidato.touched" style="color: red; text-align: center; font-size: 0.9em; margin-top: 10px;">
+      Por favor, complete todos los campos obligatorios correctamente.
+    </p>
+
+  </form>
 </ion-content>
