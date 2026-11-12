@@ -1,9 +1,9 @@
-# TalentFlow - Registro Empresarial de Hojas de Vida
+# Registro Empresarial HV
 
-## Nombre del proyecto y descripción
-**TalentFlow** es una aplicación móvil desarrollada para solucionar un problema real de la empresa ficticia TalentFlow SA. El equipo de Talento Humano estaba recibiendo hojas de vida por correo electrónico, lo que dificultaba la organización de los perfiles de los candidatos. 
+## Desarrollo y nombre de la aplicación
+El desarrollo de la aplicación llamada TalentFlow es una solución móvil como respuesta a la necesidad identificada por la empresa ficticia de TalenFlow S.A. En el área de recursos humanos la recepción de CV se realizaba mediante correo electrónico, ocasionando dificultades para clasificar, almacenar y consultar la información de postulantes a diferentes cargos.
 
-Para solucionarlo, creamos este prototipo funcional (MVP) en forma de app móvil, donde el personal puede llenar un formulario estructurado y guardarlo directamente en la nube. El objetivo principal fue dejar de lado los correos y centralizar la información en una base de datos rápida y consultable.
+Al presentar dicha situación, se desarrolló un producto mínimo viable (MVP) que solucione el problema, la aplicación movil permite el registro de los aspirantes a treavés de un formulario organizado y almacena la información directamente a un servicio en la nube Firebase. Por tanto se busca sustituir el manejo de documentos mediante emails por un mecanismo centralizado que facilite adminstración, conservación y consulta de perfiles profesionales. 
 
 ## Integrantes
 - [Nombre del Integrante 1]
