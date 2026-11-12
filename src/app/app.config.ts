@@ -2,7 +2,11 @@ import { ApplicationConfig } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideIonicAngular } from '@ionic/angular/standalone';
 import { HomePage } from './home/home.page';
-import { ConsultarPage } from './consultar/consultar.page'; // <-- Importamos la nueva página
+import { ConsultarPage } from './consultar/consultar.page';
+
+// Importaciones para los íconos
+import { addIcons } from 'ionicons';
+import { arrowBack, refreshOutline } from 'ionicons/icons';
 
 // Importaciones de Firebase
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
@@ -14,7 +18,7 @@ export const appConfig: ApplicationConfig = {
     provideIonicAngular(),
     provideRouter([
       { path: '', component: HomePage },
-      { path: 'consultar', component: ConsultarPage } // <-- Agregamos la ruta
+      { path: 'consultar', component: ConsultarPage }
     ]),
     
     // Conexión a Firebase
@@ -22,3 +26,6 @@ export const appConfig: ApplicationConfig = {
     provideFirestore(() => getFirestore())
   ]
 };
+
+// AQUÍ ESTÁ LA LÍNEA QUE FALTABA: Registramos los íconos globalmente
+addIcons({ arrowBack, refreshOutline });

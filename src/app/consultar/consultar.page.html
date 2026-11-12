@@ -1,11 +1,13 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>TalentFlow - Candidatos</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="cargarCandidatos()">
-        <ion-icon name="refresh-outline"></ion-icon>
+  <ion-toolbar color="primary">
+    <!-- Botón para regresar (con texto para que sea infalible) -->
+    <ion-buttons slot="start">
+      <ion-button (click)="volverAlFormulario()" color="light">
+    <ion-icon slot="start" name="arrow-back"></ion-icon>
       </ion-button>
     </ion-buttons>
+
+    <ion-title>TalentFlow - Candidatos</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -14,6 +16,11 @@
   <!-- Título de bienvenida -->
   <h2 class="ion-text-center" style="color: #3880ff; margin-bottom: 5px;">Perfiles Registrados</h2>
   <p class="ion-text-center" style="font-size: 0.9em; color: gray; margin-top: 0;">Total: {{ candidatos.length }} candidato(s)</p>
+
+  <!-- Botón de recargar por si acaso -->
+  <div class="ion-text-center" style="margin-bottom: 15px;">
+    <ion-button size="small" (click)="cargarCandidatos()">Recargar Lista</ion-button>
+  </div>
 
   <!-- Spinner -->
   <div *ngIf="cargando" class="ion-text-center ion-margin-top">
@@ -32,8 +39,8 @@
         </ion-card-header>
         
         <ion-card-content>
-          <p><strong>📧 Correo:</strong> {{ candidato.correo }}</p>
-          <p><strong>💼 Años de Exp:</strong> {{ candidato.aniosExperiencia }}</p>
+          <p><strong>Correo:</strong> {{ candidato.correo }}</p>
+          <p><strong>Años de Exp:</strong> {{ candidato.aniosExperiencia }}</p>
           
           <ion-accordion-group>
             <ion-accordion value="detalle">
@@ -41,13 +48,13 @@
                 <ion-label style="font-size: 0.9em;">Ver Detalle Completo</ion-label>
               </ion-item>
               <div slot="content" class="ion-padding" style="font-size: 0.9em;">
-                <p><strong>📞 Teléfono:</strong> {{ candidato.telefono }}</p>
-                <p><strong>🎂 Fecha Nacimiento:</strong> {{ candidato.fechaNacimiento }}</p>
-                <p><strong>🎓 Nivel Académico:</strong> {{ candidato.nivelAcademico }}</p>
-                <p><strong>🏠 Modalidad:</strong> {{ candidato.modalidadTrabajo }}</p>
-                <p><strong>🛠️ Habilidades:</strong> {{ candidato.habilidadesTecnicas?.join(', ') }}</p>
-                <p><strong>💰 Aspiración Salarial:</strong> ${{ candidato.aspiracionSalarial }}</p>
-                <p><strong>📝 Resumen:</strong> {{ candidato.resumenProfesional }}</p>
+                <p><strong>Teléfono:</strong> {{ candidato.telefono }}</p>
+                <p><strong>Fecha Nacimiento:</strong> {{ candidato.fechaNacimiento }}</p>
+                <p><strong>Nivel Académico:</strong> {{ candidato.nivelAcademico }}</p>
+                <p><strong>Modalidad:</strong> {{ candidato.modalidadTrabajo }}</p>
+                <p><strong>Habilidades:</strong> {{ candidato.habilidadesTecnicas?.join(', ') }}</p>
+                <p><strong>Aspiración Salarial:</strong> ${{ candidato.aspiracionSalarial }}</p>
+                <p><strong>Resumen:</strong> {{ candidato.resumenProfesional }}</p>
               </div>
             </ion-accordion>
           </ion-accordion-group>
