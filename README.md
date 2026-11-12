@@ -5,9 +5,8 @@ El desarrollo de la aplicación llamada TalentFlow es una solución móvil como 
 
 Al presentar dicha situación, se desarrolló un producto mínimo viable (MVP) que solucione el problema, la aplicación movil permite el registro de los aspirantes a treavés de un formulario organizado y almacena la información directamente a un servicio en la nube Firebase. Por tanto se busca sustituir el manejo de documentos mediante emails por un mecanismo centralizado que facilite adminstración, conservación y consulta de perfiles profesionales. 
 
-## Integrantes
-- [Nombre del Integrante 1]
-- [Nombre del Integrante 2] *(Bórralo si lo hiciste individual)*
+## Integrante
+- [Mario Endara]
 
 ## Objetivo y funcionalidades implementadas
 El objetivo principal era crear una app que permitiera registrar, validar, almacenar y consultar perfiles profesionales usando Ionic y Firebase.
@@ -21,7 +20,7 @@ Lo que logramos implementar fue:
 - Limpieza automática del formulario después de un registro exitoso.
 
 ## Tecnologías y componentes Ionic utilizados
-- Frontend: Ionic Framework con Angular (en modo Standalone).
+- Frontend: Ionic Framework con Angular - modo Standalone
 - Base de datos: Firebase Cloud Firestore.
 - Librerías: AngularFire.
 
